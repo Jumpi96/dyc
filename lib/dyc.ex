@@ -4,15 +4,15 @@ defmodule Dyc do
   """
 
   @doc """
-  Hello world.
+  Add.
 
   ## Examples
 
-      iex> Dyc.hello()
-      :world
+      iex> Dyc.add(1, 1)
+      2
 
   """
-  def hello do
-    :world
+  def add(a,b) do
+    a + b
   end
 end

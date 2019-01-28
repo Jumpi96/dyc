@@ -1,6 +1,8 @@
 # Dyc
 
 [![Build Status](https://travis-ci.com/Jumpi96/dyc.svg?branch=master)](https://travis-ci.com/Jumpi96/dyc)
+[![codecov](https://codecov.io/gh/Jumpi96/dyc/branch/master/graph/badge.svg)](https://codecov.io/gh/Jumpi96/dyc)
+
 
 **TODO: Add description**
 
