@@ -1,5 +1,7 @@
 # Dyc
 
+[![Build Status](https://travis-ci.com/Jumpi96/dyc.svg?branch=master)](https://travis-ci.com/Jumpi96/dyc)
+
 **TODO: Add description**
 
 ## Installation
