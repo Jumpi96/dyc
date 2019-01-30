@@ -1,7 +1,5 @@
 defmodule Dyc.CLI do
 
-  @default_count 4
-
   @moduledoc """
   Handle the command line parsing and the dispatch to
   the various functions that end up generating the reports
@@ -10,6 +8,7 @@ defmodule Dyc.CLI do
   def run(argv) do
     argv 
     |> parse_args
+    |> process
   end
 
   @doc """
@@ -17,22 +16,43 @@ defmodule Dyc.CLI do
 
   Otherwise it is a path and a .csv file.
 
-  Return a tuple of `{ code_path, csv_file }`, or :help if help was given.
+  Return a tuple of `{code_path, csv_file}`, or :help if help was given.
   """
   def parse_args(argv) do
     parse = OptionParser.parse(argv, switches: [help: :boolean],
                                      aliases:  [h:    :help])
     case parse do
       {[help: true], _,          _} -> :help
-      {_, [code_path, csv_file], _} -> {code_path, csv_file}
-      _                                 -> :help
+      {_, [code_path, csv_file], _} -> check_args({code_path, csv_file})
+      _                             -> :help
     end
+  end
+
+  @doc """
+  Check if code_path is an existing path and csv_file an existing file.
+
+  Return a tuple of `{code_path, csv_file}`, or :error if any does not exist.
+  """
+  def check_args({code_path, csv_file}) do
+    case {File.exists?(code_path), File.open(csv_file)} do
+      {true, {:ok, _}} -> {code_path, csv_file}
+      _                -> :error
+    end
+  end
+
+  def process(:error) do
+    IO.puts """
+    Error: input arguments are not valid.
+    """
   end
 
   def process(:help) do
     IO.puts """
-    usage:  dyc <code_path> <csv_file> [ count | #{@default_count} ]
+    Usage: dyc <code_path> <csv_file>
     """
-    System.halt(0)
+  end
+
+  def process({_code_path, _csv_file}) do
+    :ok
   end
 end
