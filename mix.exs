@@ -27,6 +27,7 @@ defmodule Dyc.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:csv, "~> 2.0.0"},
       {:excoveralls, "~> 0.5", only: :test},
       {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
     ]
