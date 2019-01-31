@@ -40,6 +40,12 @@ defmodule Dyc.CLI do
     end
   end
 
+  @doc """
+  Receive an atom or a tuple with both files for returning a mesage or calling
+  the processing of the files.
+
+  Return something, or a message if the input wasn't valid.
+  """
   def process(:error) do
     IO.puts """
     Error: input arguments are not valid.
@@ -52,7 +58,7 @@ defmodule Dyc.CLI do
     """
   end
 
-  def process({_code_path, _csv_file}) do
-    :ok
+  def process(files) do
+    Dyc.DycProcessor.process_files(files)
   end
 end
