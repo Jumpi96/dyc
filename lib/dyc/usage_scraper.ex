@@ -1,5 +1,7 @@
 defmodule Dyc.UsageScraper do
 
+  @required_keys ["count", "file", "function", "line"]
+
   @moduledoc """
   Get the usage data from the input file and transform it to
   the internal representation: [
@@ -18,8 +20,10 @@ defmodule Dyc.UsageScraper do
   Returns a checked list of maps.
   """
   def scrap_file(path, format) do
-    File.stream!(path) 
+    path
+      |> File.stream!
       |> decode_file(format)
+      |> check_maps
       |> decode_result
   end
 
@@ -32,7 +36,6 @@ defmodule Dyc.UsageScraper do
     file_stream
       |> CSV.decode!(headers: true) 
       |> Enum.to_list
-      |> Keyword.values
   end
 
   @doc """
@@ -41,15 +44,14 @@ defmodule Dyc.UsageScraper do
   Returns a checked list of maps.
   """
   def check_maps(usage_list) do
-    required_keys = ["count", "file", "function", "line"]
     result = usage_list |> Enum.map(
-      fn map -> Enum.all?(required_keys, &Map.has_key?(map, &1)) end
+      fn map -> Enum.all?(@required_keys, &Map.has_key?(map, &1)) end
     )
-    if Enum.find(check_maps(result), fn x -> x = false end) == nil do
+    if Enum.find(result, fn x -> x == false end) == nil do
       {:ok, usage_list}
     else
       {:error, usage_list}
-    end
+    end    
   end
 
   def decode_result({:ok, usage_list}), do: usage_list
@@ -57,6 +59,5 @@ defmodule Dyc.UsageScraper do
     IO.puts """
     Error: .CSV file is not valid.
     """
-    System.halt(1)
   end
 end

@@ -11,6 +11,6 @@ defmodule Dyc.DycProcessor do
     """  
     def process_files({_code_path, csv_file}) do
       csv_file
-        |> Dyc.UsageScraper.scrap_file(:csv, csv_file)
+        |> Dyc.UsageScraper.scrap_file(:csv)
     end
   end
