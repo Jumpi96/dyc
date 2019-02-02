@@ -23,8 +23,12 @@ defmodule UsageScraperTest do
   @doc """
   Component test
   """
-  test "scrap .csv file" do
-    assert scrap_file(@test_file, :csv) == @test_map
+  test "scrap .csv file concurrently" do
+    scrap_file(self(), @test_file, :csv)
+    receive do
+      {_pid, data} -> assert data == @test_map
+      after 1000 -> assert 0 == @test_map
+    end
   end
 
   @doc """
@@ -59,6 +63,10 @@ defmodule UsageScraperTest do
   test "decode error result" do
     error_execution = fn -> decode_result({:error, []}) end
     assert capture_io(error_execution) =~ "Error: .CSV file is not valid."
+  end
+
+  test "scrap .csv file" do
+    assert scrap_file(@test_file, :csv) == @test_map
   end
   
 end

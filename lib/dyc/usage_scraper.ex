@@ -19,6 +19,10 @@ defmodule Dyc.UsageScraper do
   
   Returns a checked list of maps.
   """
+  def scrap_file(caller, path, format) do
+    result = scrap_file(path, format)
+    send caller, {self(), result}
+  end
   def scrap_file(path, format) do
     path
       |> File.stream!
