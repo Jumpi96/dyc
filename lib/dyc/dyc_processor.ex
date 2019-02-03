@@ -12,7 +12,7 @@ defmodule Dyc.DycProcessor do
     def process_files({code_path, csv_file}) do
       spawn(__MODULE__, :process_concurrently, [self(), {csv_file, code_path}, {}])
       receive do
-        {usage_data, code_data} -> usage_data
+        {usage_data, code_data} -> {usage_data, code_data}
       end
     end
 

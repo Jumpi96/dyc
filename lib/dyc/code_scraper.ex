@@ -50,10 +50,13 @@ defmodule Dyc.CodeScraper do
       |> Stream.with_index
       |> Stream.filter(fn ({line, _index}) -> String.contains?(line, "def ") end) 
       |> Stream.map(fn ({line, index}) -> 
-        %{file: path, line: index, function: String.slice(line, index_of(line, "def") + 4..index_of(line, ")"))} end) 
+        %{
+          "file" => path, 
+          "line" => index, 
+          "function" => String.slice(line, index_of(line, "def") + 4..index_of(line, ")"))
+        } end)
       |> Enum.to_list
   end
 
   def index_of(string, char), do: string |> :binary.match(char) |> elem(0)
-
 end
