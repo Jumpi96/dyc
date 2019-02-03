@@ -17,11 +17,11 @@ defmodule Dyc.DycProcessor do
     end
 
     def process_concurrently(caller, {csv_file, code_path}, {}) do
-      usage_pid = spawn(Dyc.UsageScraper, :scrap_file, [self(), csv_file, :csv])
-      code_pid = spawn(Dyc.CodeScraper, :scrap_code, [self(), code_path, :python])
+      spawn(Dyc.UsageScraper, :scrap_file, [self(), csv_file, :csv])
+      spawn(Dyc.CodeScraper, :scrap_code, [self(), code_path, :python])
       receive do
-        {usage_pid, usage_data} -> process_concurrently(caller, {usage_data, nil})
-        {code_pid, code_data} -> process_concurrently(caller, {nil, code_data})
+        {:usage, usage_data} -> process_concurrently(caller, {usage_data, nil})
+        {:code, code_data} -> process_concurrently(caller, {nil, code_data})
       end
     end
     def process_concurrently(caller, {usage, nil}) do

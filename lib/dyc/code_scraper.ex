@@ -14,11 +14,11 @@ defmodule Dyc.CodeScraper do
   @doc """
   Receives a project path and the language of the code as an atom.
   
-  Returns a list of maps.
+  Returns a list of maps as a message to a caller.
   """
   def scrap_code(caller, path, language) do
     result = scrap_folder(path, language)
-    send caller, {self(), result}
+    send caller, {:code, result}
   end
 
   def scrap_folder(path, language) do
@@ -45,7 +45,8 @@ defmodule Dyc.CodeScraper do
   end
 
   def scrap_code_file(path, :python) do
-    File.stream!(path) 
+    path
+      |> File.stream!
       |> Stream.with_index
       |> Stream.filter(fn ({line, _index}) -> String.contains?(line, "def ") end) 
       |> Stream.map(fn ({line, index}) -> 
@@ -53,8 +54,6 @@ defmodule Dyc.CodeScraper do
       |> Enum.to_list
   end
 
-  def index_of(string, char) do
-    :binary.match(string, char) |> elem(0)
-  end
+  def index_of(string, char), do: string |> :binary.match(char) |> elem(0)
 
 end

@@ -21,7 +21,7 @@ defmodule Dyc.UsageScraper do
   """
   def scrap_file(caller, path, format) do
     result = scrap_file(path, format)
-    send caller, {self(), result}
+    send caller, {:usage, result}
   end
   def scrap_file(path, format) do
     path
