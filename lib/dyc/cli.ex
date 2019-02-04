@@ -61,11 +61,11 @@ defmodule Dyc.CLI do
   def process(files) do
     IO.puts """
     dyc - Report: Least used functions in the code.
-    -----------------------------------------------
     """
+    columns = ["function", "file", "line", "count"]
     files
       |> Dyc.DycProcessor.process
       |> Dyc.Reporter.report_least_used
-      |> IO.inspect
+      |> Dyc.TableFormatter.print_table_for_columns(columns)
   end
 end
