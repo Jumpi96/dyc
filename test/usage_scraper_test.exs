@@ -7,15 +7,15 @@ defmodule UsageScraperTest do
   @test_map [
     %{
       "count" => "100",
-      "file" => "service.py",
-      "function" => "run()",
-      "line" => "42"
+      "file" => "./test/data/py_code/service.py",
+      "function" => "create_app(config_name=None)",
+      "line" => "0"
     },
     %{
       "count" => "10",
-      "file" => "service.py",
-      "function" => "start_cache()",
-      "line" => "40"
+      "file" => "./test/data/py_code/routes/route.py",
+      "function" => "index()",
+      "line" => "1"
     }
   ]
   @test_file "./test/data/usage.csv"

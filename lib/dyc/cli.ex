@@ -59,6 +59,6 @@ defmodule Dyc.CLI do
   end
 
   def process(files) do
-    Dyc.DycProcessor.process_files(files, {})
+    Dyc.DycProcessor.process(files)
   end
 end

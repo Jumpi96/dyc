@@ -4,6 +4,12 @@ defmodule Dyc.DycProcessor do
     Handle the processing of the usage and code data.
     """
 
+    def process(files) do
+      files 
+        |> process_files({})
+        |> merge_lists
+    end
+
     @doc """
     Process two files concurrently. Waits for data returned by each
     process and send a message to caller function.
@@ -27,5 +33,36 @@ defmodule Dyc.DycProcessor do
       receive do
         {_, usage_data} -> {usage_data, code}
       end
+    end
+
+    @doc """
+    Merge two files processed results.
+  
+    Return list of functions of the project with usage summarized.
+    """ 
+    def merge_lists({usage_list, code_list}) do
+      code_list
+        |> Enum.map(&(
+          usage_list
+            |> Enum.filter(fn x -> x["function"] == &1["function"] end)
+            |> sum_function_usage(&1)
+        ))
+    end
+
+    @doc """
+    Receives list of usages of the functions and map of the function.
+  
+    Return map of the function with new key "count".
+    """ 
+    def sum_function_usage(usage_list, function) do
+      sum = usage_list 
+        |> Enum.reduce(0,
+          fn x, acc -> 
+            x["count"]
+              |> Integer.parse 
+              |> elem(0)
+              |> Kernel.+(acc)
+          end)
+      Map.put(function, "count", sum)
     end
   end
