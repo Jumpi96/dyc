@@ -5,7 +5,7 @@ defmodule Dyc.CLI do
   the various functions that end up generating the reports
   """
 
-  def run(argv) do
+  def main(argv) do
     argv 
     |> parse_args
     |> process
@@ -59,6 +59,13 @@ defmodule Dyc.CLI do
   end
 
   def process(files) do
-    Dyc.DycProcessor.process(files)
+    IO.puts """
+    dyc - Report: Least used functions in the code.
+    -----------------------------------------------
+    """
+    files
+      |> Dyc.DycProcessor.process
+      |> Dyc.Reporter.report_least_used
+      |> IO.inspect
   end
 end

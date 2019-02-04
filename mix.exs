@@ -4,6 +4,7 @@ defmodule Dyc.MixProject do
   def project do
     [
       app: :dyc,
+      escript: escript_config(),
       version: "0.1.0",
       elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
@@ -30,6 +31,12 @@ defmodule Dyc.MixProject do
       {:csv, "~> 2.0.0"},
       {:excoveralls, "~> 0.5", only: :test},
       {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
+    ]
+  end
+
+  defp escript_config do
+    [
+      main_module: Dyc.CLI
     ]
   end
 end

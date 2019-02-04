@@ -16,7 +16,7 @@ defmodule Dyc.DycProcessor do
   
     Return tuple of list of maps.
     """ 
-    def process_files({csv_file, code_path}, {}) do
+    def process_files({code_path, csv_file}, {}) do
       spawn(Dyc.UsageScraper, :scrap_file, [self(), csv_file, :csv])
       spawn(Dyc.CodeScraper, :scrap_code, [self(), code_path, :python])
       receive do
