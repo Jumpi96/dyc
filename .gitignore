@@ -23,5 +23,5 @@ erl_crash.dump
 dyc-*.tar
 
 # Ignore binary.
-dyc
+/dyc
 
