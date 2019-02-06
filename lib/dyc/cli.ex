@@ -5,6 +5,8 @@ defmodule Dyc.CLI do
   the various functions that end up generating the reports
   """
 
+  @current_reports ["A"]
+
   def main(argv) do
     argv 
     |> parse_args
@@ -43,8 +45,6 @@ defmodule Dyc.CLI do
   @doc """
   Receive an atom or a tuple with both files for returning a mesage or calling
   the processing of the files.
-
-  Return something, or a message if the input wasn't valid.
   """
   def process(:error) do
     IO.puts """
@@ -59,13 +59,40 @@ defmodule Dyc.CLI do
   end
 
   def process(files) do
-    IO.puts """
-    dyc - Report: Least used functions in the code.
-    """
-    columns = ["function", "file", "line", "count"]
+    IO.puts "\nWelcome to dyc!\n"
     files
       |> Dyc.DycProcessor.process
-      |> Dyc.Reporter.report_least_used
+      |> choose_report
+  end
+
+  @doc """
+  Receive an atom or the processed data to show the user the available
+  reports for them to select. It iterates while you do not enter "0".
+  """
+  def choose_report(:exit), do: IO.puts "Bye!"
+  def choose_report(data) do
+    IO.puts """
+    Choose a report to print:
+    A) Least used functions in your project.
+    0) Exit dyc.
+    """
+    IO.gets("> ")
+      |> String.trim
+      |> String.capitalize
+      |> print_report(data)
+    choose_report(data)
+  end
+
+  @doc """
+  Calls Reporter to get the selected report. If it receives a "0",
+  it exits the application.
+  """
+  def print_report("0", _data), do: System.halt
+  def print_report(report, data) when report in @current_reports do
+    columns = ["function", "file", "line", "count"]
+    report
+      |> Dyc.Reporter.get_report(data)
       |> Dyc.TableFormatter.print_table_for_columns(columns)
   end
+  def print_report(_report, data), do: choose_report(data)
 end

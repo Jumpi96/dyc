@@ -22,6 +22,7 @@ defmodule Dyc.TableFormatter do
           IO.puts(separator(column_widths))
           puts_in_columns(data_by_columns, format)
     end
+    IO.puts "\n"
   end
 
   def split_into_columns(rows, headers) do
