@@ -5,7 +5,7 @@ defmodule Dyc.CLI do
   the various functions that end up generating the reports
   """
 
-  @current_reports ["A"]
+  @current_reports ["A", "B"]
 
   def main(argv) do
     argv 
@@ -74,6 +74,7 @@ defmodule Dyc.CLI do
     IO.puts """
     Choose a report to print:
     A) Least used functions in your project.
+    B) Most used functions in your project.
     0) Exit dyc.
     """
     IO.gets("> ")

@@ -25,7 +25,7 @@ defmodule ReportTest do
   ]
 
   @doc """
-  Component test
+  Unit tests
   """
   test "generate report of least used" do
     assert report_least_used(@test_list) == [      
@@ -48,6 +48,29 @@ defmodule ReportTest do
         "line" => 0
       }
     ]
-
   end
+
+  test "generate report of most used" do
+    assert report_most_used(@test_list) == [      
+      %{
+        "count" => 100,
+        "file" => "./test/data/py_code/service.py",
+        "function" => "create_app(config_name=None)",
+        "line" => 0
+      },
+      %{
+        "count" => 10,
+        "file" => "./test/data/py_code/routes/route.py",
+        "function" => "index()",
+        "line" => 1
+      },
+      %{
+        "count" => 0,
+        "file" => "./test/data/py_code/routes/route.py",
+        "function" => "del_todo(todo_id)",
+        "line" => 7
+      }
+    ]
+  end
+
 end
