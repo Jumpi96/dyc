@@ -1,11 +1,3 @@
-#---
-# Excerpted from "Programming Elixir â‰¥ 1.6",
-# published by The Pragmatic Bookshelf.
-# Copyrights apply to this code. It may not be used to create training material,
-# courses, books, articles, and the like. Contact us if you are in doubt.
-# We make no guarantees that this code is fit for any purpose.
-# Visit http://www.pragmaticprogrammer.com/titles/elixir16 for more book information.
-#---
 defmodule Dyc.TableFormatter do
 
   @moduledoc """
@@ -22,7 +14,6 @@ defmodule Dyc.TableFormatter do
           IO.puts(separator(column_widths))
           puts_in_columns(data_by_columns, format)
     end
-    IO.puts "\n"
   end
 
   def split_into_columns(rows, headers) do

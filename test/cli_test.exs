@@ -1,7 +1,7 @@
 defmodule CliTest do
   use ExUnit.Case
 
-  import Dyc.CLI, only: [parse_args: 1, check_args: 1, process: 1]
+  import Dyc.CLI
   import ExUnit.CaptureIO
 
   test ":help returned by option parsing with -h and --help options" do
@@ -31,4 +31,13 @@ defmodule CliTest do
     assert capture_io(help_execution) =~ "Usage: dyc <code_path> <csv_file>"
     assert capture_io(error_execution) =~ "Error: input arguments are not valid."
   end
+
+  test "sanitize offset" do
+    data = 1..13 |> Enum.to_list
+    assert sanitize_offset(data, 0, 10) == 0
+    assert sanitize_offset(data, -10, 10) == 0
+    assert sanitize_offset(data, 10, 10) == 10
+    assert sanitize_offset(data, 20, 10) == 10
+  end
+
 end

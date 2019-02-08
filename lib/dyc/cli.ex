@@ -5,7 +5,9 @@ defmodule Dyc.CLI do
   the various functions that end up generating the reports
   """
 
+  @page_size Application.get_env(:dyc, :page_size)
   @current_reports ["A", "B"]
+  @columns ["function", "file", "line", "count"]
 
   def main(argv) do
     argv 
@@ -67,7 +69,7 @@ defmodule Dyc.CLI do
 
   @doc """
   Receive an atom or the processed data to show the user the available
-  reports for them to select. It iterates while you do not enter "0".
+  reports for them to select. It iterates while you do not enter "Q".
   """
   def choose_report(:exit), do: IO.puts "Bye!"
   def choose_report(data) do
@@ -75,25 +77,61 @@ defmodule Dyc.CLI do
     Choose a report to print:
     A) Least used functions in your project.
     B) Most used functions in your project.
-    0) Exit dyc.
+    Q) Exit dyc.
     """
     IO.gets("> ")
       |> String.trim
       |> String.capitalize
-      |> print_report(data)
+      |> process_report(data, 0)
     choose_report(data)
   end
 
   @doc """
-  Calls Reporter to get the selected report. If it receives a "0",
-  it exits the application.
+  Let user navigate the report, choose another report or exit the application.
   """
-  def print_report("0", _data), do: System.halt
-  def print_report(report, data) when report in @current_reports do
-    columns = ["function", "file", "line", "count"]
-    report
-      |> Dyc.Reporter.get_report(data)
-      |> Dyc.TableFormatter.print_table_for_columns(columns)
+  def process_report("Q", _data, _offset), do: System.halt
+  def process_report(report, data, offset) when report in @current_reports do
+    print_report(report, data, offset)
+    page_navigate(report, data, offset)
   end
-  def print_report(_report, data), do: choose_report(data)
+  def process_report(_report, data, _offset), do: choose_report(data)
+
+  @doc """
+  Use Reporter and TableFormatter to show the report
+  with a determinated offset.
+  """
+  def print_report(report, data, offset) do
+    report
+      |> Dyc.Reporter.get_report(data, offset)
+      |> Dyc.TableFormatter.print_table_for_columns(@columns)
+  end
+
+  @doc """
+  Receive a navigation input and continue the CLI flow.
+  """
+  def page_navigate(report, data, offset) do
+    IO.puts "\nA) Next page. B) Previous page. Q) Exit report."
+    input = "> "
+      |> IO.gets
+      |> String.trim
+      |> String.capitalize
+    case input do
+      "A" -> process_report(report, data, sanitize_offset(data, offset + @page_size, @page_size))
+      "B" -> process_report(report, data, sanitize_offset(data, offset - @page_size, @page_size))
+      "Q" -> IO.puts "\n"
+      _ -> offset
+    end
+  end
+
+  @doc """
+  Avoid an offset off the data.
+  """
+  def sanitize_offset(data, offset, page_size) do
+    cond do
+      offset >= Enum.count(data) -> offset - page_size
+      offset < 0 -> offset + page_size
+      true -> offset
+    end
+  end
+
 end
