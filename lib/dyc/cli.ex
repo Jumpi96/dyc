@@ -6,8 +6,7 @@ defmodule Dyc.CLI do
   """
 
   @page_size Application.get_env(:dyc, :page_size)
-  @current_reports ["A", "B"]
-  @columns ["function", "file", "line", "count"]
+  @current_reports ["A", "B", "C", "D"]
 
   def main(argv) do
     argv 
@@ -77,6 +76,8 @@ defmodule Dyc.CLI do
     Choose a report to print:
     A) Least used functions in your project.
     B) Most used functions in your project.
+    C) Least used files in your project.
+    D) Most used files in your project.
     Q) Exit dyc.
     """
     IO.gets("> ")
@@ -103,7 +104,7 @@ defmodule Dyc.CLI do
   def print_report(report, data, offset) do
     report
       |> Dyc.Reporter.get_report(data, offset)
-      |> Dyc.TableFormatter.print_table_for_columns(@columns)
+      |> Dyc.TableFormatter.print_table_for_columns
   end
 
   @doc """
