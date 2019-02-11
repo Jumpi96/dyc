@@ -32,7 +32,7 @@ defmodule UsageScraperTest do
   test "scrap .csv file concurrently" do
     scrap_file(self(), @test_file, :csv)
     receive do
-      {_pid, data} -> assert data == @test_map
+      {_pid, data} -> assert Enum.sort(data) == Enum.sort(@test_map)
       after 1000 -> assert 0 == @test_map
     end
   end

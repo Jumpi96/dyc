@@ -34,7 +34,7 @@ defmodule CodeScraperTest do
     test "scrap project concurrently" do
       scrap_code(self(), @test_project, :python)
       receive do
-        {_pid, data} -> assert data == @test_map
+        {_pid, data} -> assert Enum.sort(data) == Enum.sort(@test_map)
         after 2000 -> assert 0 == @test_map
       end
     end
