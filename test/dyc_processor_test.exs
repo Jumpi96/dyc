@@ -36,6 +36,6 @@ defmodule DycProcessorTest do
   Component test
   """
   test "process files" do
-    assert process({@test_project, @test_file}) == @test_result
+    assert Enum.sort(process({@test_project, @test_file})) == Enum.sort(@test_result)
   end
 end
