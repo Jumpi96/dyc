@@ -16,6 +16,12 @@ defmodule UsageScraperTest do
       "file" => "./test/data/py_code/routes/route.py",
       "function" => "index()",
       "line" => "1"
+    },
+    %{
+      "count" => "7",
+      "file" => "./test/data/py_code/utils/cache.py",
+      "function" => "clean_cache()",
+      "line" => "0"
     }
   ]
   @test_file "./test/data/usage.csv"
@@ -50,6 +56,12 @@ defmodule UsageScraperTest do
         "file" => "service.py",
         "function" => "start_cache()",
         "line" => "40"
+      },
+      %{
+        "count" => "7",
+        "file" => "./test/data/py_code/utils/cache.py",
+        "function" => "clean_cache()",
+        "line" => "0"
       }
     ]
     assert check_maps(map) == {:error, map}

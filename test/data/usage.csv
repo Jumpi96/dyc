@@ -1,3 +1,4 @@
 function,file,line,count
 create_app(config_name=None),./test/data/py_code/service.py,0,100
 index(),./test/data/py_code/routes/route.py,1,10
+clean_cache(),./test/data/py_code/utils/cache.py,0,7

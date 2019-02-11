@@ -16,6 +16,7 @@ defmodule Dyc.Reporter do
       "B" -> data |> report_most_used |> paginate(offset, @page_size)
       "C" -> data |> report_least_used_files |> paginate(offset, @page_size)
       "D" -> data |> report_most_used_files |> paginate(offset, @page_size)
+      "E" -> data |> report_biggest_abs_dev_files |> paginate(offset, @page_size)
     end
   end
 
@@ -52,6 +53,25 @@ defmodule Dyc.Reporter do
       |> Enum.sort_by(&Map.fetch(&1, "count"), &>=/2)
     {report, @file_columns}
   end
+
+  def report_biggest_abs_dev_files(list) do
+    IO.puts """
+      dyc - Report: Biggest absolute deviation between files in the project. \n
+    """
+    report = list
+      |> group_by_file
+      |> calc_abs_dev
+      |> Enum.sort_by(&Map.fetch(&1, "deviation"), &>=/2)
+      {report, @file_columns ++ ["deviation"]}
+  end
+
+  def calc_abs_dev(files) do
+    avg = files
+      |> Enum.reduce(0, fn x, acc -> acc + x["count"] end)
+      |> Kernel./(Enum.count(files))
+    files |> Enum.map(&(Map.put(&1, "deviation", abs(&1["count"] - avg))))
+  end
+
 
   def group_by_file(list) do
     list 

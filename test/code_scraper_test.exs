@@ -13,7 +13,12 @@ defmodule CodeScraperTest do
         "file" => "./test/data/py_code/routes/route.py", 
         "function" => "del_todo(todo_id)", 
         "line" => 7
-      }, 
+      },
+      %{
+        "file" => "./test/data/py_code/utils/cache.py",
+        "function" => "clean_cache()",
+        "line" => 0
+      },
       %{
         "file" => "./test/data/py_code/service.py", 
         "function" => "create_app(config_name=None)", 

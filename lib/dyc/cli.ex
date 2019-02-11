@@ -6,7 +6,7 @@ defmodule Dyc.CLI do
   """
 
   @page_size Application.get_env(:dyc, :page_size)
-  @current_reports ["A", "B", "C", "D"]
+  @current_reports ["A", "B", "C", "D", "E"]
 
   def main(argv) do
     argv 
@@ -78,6 +78,7 @@ defmodule Dyc.CLI do
     B) Most used functions in your project.
     C) Least used files in your project.
     D) Most used files in your project.
+    E) Biggest absolute deviated files in your project.
     Q) Exit dyc.
     """
     IO.gets("> ")

@@ -17,6 +17,12 @@ defmodule DycProcessorTest do
       "line" => 7
     },
     %{
+      "count" => 7,
+      "file" => "./test/data/py_code/utils/cache.py",
+      "function" => "clean_cache()",
+      "line" => 0
+    },
+    %{
       "count" => 100,
       "file" => "./test/data/py_code/service.py",
       "function" => "create_app(config_name=None)",
